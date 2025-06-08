@@ -14,7 +14,7 @@ import (
 func SendEmail(email string, tasks []Task) error {
 	// ดึงค่าการตั้งค่าจาก Environment Variables
 	smtpHost := os.Getenv("SMTP_HOST")
-	smtpPort := 587 // เปลี่ยนเป็นพอร์ตของเซิร์ฟเวอร์ SMTP ของคุณ
+	smtpPort := 587 
 	smtpUser := os.Getenv("SMTP_USER")
 	smtpPass := os.Getenv("SMTP_PASS")
 	sender := os.Getenv("EMAIL_SENDER")
@@ -32,7 +32,7 @@ func SendEmail(email string, tasks []Task) error {
 
 	// ตั้งค่า SMTP Dialer
 	d := gomail.NewDialer(smtpHost, smtpPort, smtpUser, smtpPass)
-	d.TLSConfig = &tls.Config{InsecureSkipVerify: true} // ปิดการยืนยัน TLS สำหรับการทดสอบ
+	d.TLSConfig = &tls.Config{InsecureSkipVerify: true} 
 
 	// ส่งอีเมล
 	if err := d.DialAndSend(m); err != nil {
@@ -41,7 +41,6 @@ func SendEmail(email string, tasks []Task) error {
 	return nil
 }
 
-// buildEmailBody สร้าง HTML template สำหรับอีเมล
 func buildEmailBody(tasks []Task) string {
 	tmpl := `
 	<!DOCTYPE html>

@@ -31,7 +31,7 @@ func QueryTasks(db *sql.DB) []Task {
 	var tasks []Task
 	for rows.Next() {
 		var t Task
-		if err := rows.Scan(&t.Email, &t.Deadline, &t.Task); err != nil {
+		if err := rows.Scan(&t.Email, &t.Deadline, &t.Title); err != nil {
 			log.Printf("Row scan failed: %v", err)
 			continue
 		}

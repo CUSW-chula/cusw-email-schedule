@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"task-scheduler/lib"
 
@@ -11,43 +10,48 @@ import (
 )
 
 func main() {
-	// Load environment variables
+	// Load Environment Variables
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found")
 	}
 
-	// Get database connection
+	// Connect to the database
 	db := lib.ConnectDB()
 	defer db.Close()
 
-	// Initialize cron scheduler
+	// Set up Cron Scheduler
 	c := cron.New()
 
-	// Schedule daily job at 08:00 AM
+	// Define job to send email every day at 8:00 AM
 	_, err := c.AddFunc("0 8 * * *", func() {
-		log.Println("Executing scheduled query...")
+		log.Println("Starting to fetch tasks...")
 		tasks := lib.QueryTasks(db)
-		log.Printf("Retrieved %d tasks\n", len(tasks))
-		
-		// Process tasks (example: print to console)
-		for i, task := range tasks {
-			fmt.Printf("[%d] Email: %s, Deadline: %s, Task: %s\n",
-				i+1,
-				task.Email,
-				task.Deadline.Format("2006-01-02"),
-				task.Task)
+		log.Printf("Found %d tasks to notify\n", len(tasks))
+
+		// Group tasks by email
+		tasksByEmail := make(map[string][]lib.Task)
+		for _, task := range tasks {
+			tasksByEmail[task.Email] = append(tasksByEmail[task.Email], task)
+		}
+
+		// Send email to each user
+		for email, userTasks := range tasksByEmail {
+			log.Printf("Sending email to: %s (%d tasks)", email, len(userTasks))
+			if err := lib.SendEmail(email, userTasks); err != nil {
+				log.Printf("Failed to send email: %v", err)
+			} else {
+				log.Printf("✅ Email sent successfully to: %s", email)
+			}
 		}
 	})
-	
+
 	if err != nil {
-		log.Fatalf("Error scheduling job: %v", err)
+		log.Fatalf("Failed to set up Cron Job: %v", err)
 	}
 
 	c.Start()
-	log.Println("Scheduler started. Waiting for next run at 08:00 AM...")
-	
-	// Keep main thread alive
-	select{}
+	log.Println("Email notification system is running... Waiting for the next execution at 08:00.")
+
+	// Wait for a signal to prevent the program from exiting
+	select {}
 }
-
-

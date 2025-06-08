@@ -7,9 +7,18 @@ import (
 
 func QueryTasks(db *sql.DB) []Task {
 	query := `
-		SELECT email, deadline, task 
-		FROM tasks 
-		WHERE deadline >= CURRENT_DATE
+		SELECT
+  			users.email,
+  			tasks."endDate" AS deadline,
+  			tasks.title
+		FROM
+  			task_assignments
+		JOIN
+  			users ON task_assignments."userId" = users.id
+		JOIN
+  			tasks ON task_assignments."taskId" = tasks.id
+		WHERE
+  			tasks."endDate"::date BETWEEN CURRENT_DATE AND CURRENT_DATE + INTERVAL '1 day'
 	`
 
 	rows, err := db.Query(query)

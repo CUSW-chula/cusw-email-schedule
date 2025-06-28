@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  task-scheduler:
+    image: bunnybunbun37204/cusw-scheduler:latest
+    container_name: cusw-scheduler
+    restart: unless-stopped
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - EMAIL_HOST=${EMAIL_HOST}
+      - EMAIL_PORT=${EMAIL_PORT}
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_FROM=${EMAIL_FROM}
+    # หากต้องการใช้ .env file แทน
+    # env_file:
+    #   - .env
+    
+    # หากต้องการ expose port
+    # ports:
+    #   - "8080:8080"
+    
+    # หากต้องการ volume สำหรับ logs
+    # volumes:
+    #   - ./logs:/app/logs

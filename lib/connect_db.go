@@ -35,6 +35,9 @@ func ConnectDB() *sql.DB {
 	}
 
 	if err != nil {
+		log.Fatalf("Database Host is : %s", os.Getenv("DB_HOST"))
+		log.Fatalf("Database Port is : %s", os.Getenv("DB_PORT"))
+		log.Fatalf("Database User is : %s", os.Getenv("DB_USER"))
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 

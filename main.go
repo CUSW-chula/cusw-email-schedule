@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"task-scheduler/lib"
+	"time"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -18,6 +19,22 @@ func main() {
 	// Connect to the database
 	db := lib.ConnectDB()
 	defer db.Close()
+
+	// Send initial test email on app startup
+	log.Println("Sending initial test email...")
+	testTasks := []lib.Task{
+		{
+			Email:    "bunyawatapp37204@gmail.com",
+			Title:    "ระบบแจ้งเตือนงานเริ่มทำงานแล้ว",
+			Deadline: time.Now().Add(24 * time.Hour), // 1 day from now
+		},
+	}
+
+	if err := lib.SendEmail("bunyawatapp37204@gmail.com", testTasks); err != nil {
+		log.Printf("Failed to send initial test email: %v", err)
+	} else {
+		log.Printf("✅ Initial test email sent successfully to: bunyawatapp37204@gmail.com")
+	}
 
 	// Set up Cron Scheduler
 	c := cron.New()

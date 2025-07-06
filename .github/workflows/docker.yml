@@ -51,11 +51,10 @@ jobs:
           DB_USER=${{ secrets.DB_USER }}
           DB_PASSWORD=${{ secrets.DB_PASSWORD }}
           DB_NAME=${{ secrets.DB_NAME }}
-          EMAIL_HOST=${{ secrets.EMAIL_HOST }}
-          EMAIL_PORT=${{ secrets.EMAIL_PORT }}
-          EMAIL_USERNAME=${{ secrets.EMAIL_USERNAME }}
-          EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}
-          EMAIL_FROM=${{ secrets.EMAIL_FROM }}
+          SMTP_HOST=${{ secrets.SMTP_HOST }}
+          SMTP_USER=${{ secrets.SMTP_USER }}
+          SMTP_PASS=${{ secrets.SMTP_PASS }}
+          EMAIL_SENDER=${{ secrets.EMAIL_SENDER }}
           EOF
 
       - name: Build Docker image

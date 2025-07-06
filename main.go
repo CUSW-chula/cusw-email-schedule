@@ -22,8 +22,8 @@ func main() {
 	// Set up Cron Scheduler
 	c := cron.New()
 
-	// Define job to send email every day at 8:00 AM
-	_, err := c.AddFunc("0 8 * * *", func() {
+	// Define job to send email every day at 4:00 PM (for testing)
+	_, err := c.AddFunc("0 16 * * *", func() {
 		log.Println("Starting to fetch tasks...")
 		tasks := lib.QueryTasks(db)
 		log.Printf("Found %d tasks to notify\n", len(tasks))
@@ -50,7 +50,7 @@ func main() {
 	}
 
 	c.Start()
-	log.Println("Email notification system is running... Waiting for the next execution at 08:00.")
+	log.Println("Email notification system is running... Waiting for the next execution at 16:00.")
 
 	// Wait for a signal to prevent the program from exiting
 	select {}

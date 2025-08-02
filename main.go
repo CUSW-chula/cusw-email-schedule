@@ -28,6 +28,16 @@ func main() {
 			Title:    "ระบบแจ้งเตือนงานเริ่มทำงานแล้ว",
 			Deadline: time.Now().Add(24 * time.Hour), // 1 day from now
 		},
+		{
+			Email:    "melodymui2003@gmail.com",
+			Title:    "ระบบแจ้งเตือนงานเริ่มทำงานแล้ว",
+			Deadline: time.Now().Add(24 * time.Hour), // 1 day from now}
+		},
+		{
+			Email:    "pond.phongsakorn1654@gmail.com",
+			Title:    "ระบบแจ้งเตือนงานเริ่มทำงานแล้ว",
+			Deadline: time.Now().Add(24 * time.Hour), // 1 day from now}
+		},
 	}
 
 	if err := lib.SendEmail("bunyawatapp37204@gmail.com", testTasks); err != nil {

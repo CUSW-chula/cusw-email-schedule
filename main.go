@@ -3,7 +3,6 @@ package main
 import (
 	"log"
 	"task-scheduler/lib"
-	"time"
 
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
@@ -22,36 +21,44 @@ func main() {
 
 	// Send initial test email on app startup
 	log.Println("📩 Sending initial test emails...")
-	testTasks := []lib.Task{
-		{
-			Email:    "bunyawatapp37204@gmail.com",
-			Title:    "ระบบแจ้งเตือนงานเริ่มทำงานแล้ว",
-			Deadline: time.Now().Add(24 * time.Hour),
-		},
-		{
-			Email:    "melodymui2003@gmail.com",
-			Title:    "ระบบแจ้งเตือนงานเริ่มทำงานแล้ว",
-			Deadline: time.Now().Add(24 * time.Hour),
-		},
-		{
-			Email:    "pond.phongsakorn1654@gmail.com",
-			Title:    "ระบบแจ้งเตือนงานเริ่มทำงานแล้ว",
-			Deadline: time.Now().Add(24 * time.Hour),
-		},
-	}
 
-	// Group tasks by email
-	tasksByEmail := make(map[string][]lib.Task)
-	for _, task := range testTasks {
-		tasksByEmail[task.Email] = append(tasksByEmail[task.Email], task)
-	}
+	// Get users with upcoming tasks for testing
+	userEmails := lib.GetUniqueUserEmails(db)
+	if len(userEmails) == 0 {
+		log.Println("ℹ️ No users with upcoming tasks found for testing")
 
-	// Send email to each recipient
-	for email, tasks := range tasksByEmail {
-		if err := lib.SendEmail(email, tasks); err != nil {
-			log.Printf("❌ Failed to send initial email to %s: %v", email, err)
+		// Create test data if no real data exists
+		testTasks := []lib.Task{
+			{
+				ID:            "test-1",
+				Title:         "ระบบแจ้งเตือนงานเริ่มทำงานแล้ว",
+				Description:   "ทดสอบระบบส่งอีเมลแจ้งเตือนงาน",
+				Status:        "Assigned",
+				ProjectID:     "test-project-1",
+				ProjectTitle:  "CUSW Email Scheduler",
+				AssigneeName:  "Test User",
+				AssignorName:  "System Administrator",
+				AssigneeEmail: "bunyawatapp37204@gmail.com",
+			},
+		}
+
+		// Send test email
+		if err := lib.SendEmail("bunyawatapp37204@gmail.com", testTasks); err != nil {
+			log.Printf("❌ Failed to send test email: %v", err)
 		} else {
-			log.Printf("✅ Initial email sent successfully to: %s", email)
+			log.Printf("✅ Test email sent successfully")
+		}
+	} else {
+		// Send real data
+		for _, email := range userEmails {
+			tasks := lib.QueryTasksByUserEmail(db, email)
+			if len(tasks) > 0 {
+				if err := lib.SendEmail(email, tasks); err != nil {
+					log.Printf("❌ Failed to send initial email to %s: %v", email, err)
+				} else {
+					log.Printf("✅ Initial email sent successfully to: %s (%d tasks)", email, len(tasks))
+				}
+			}
 		}
 	}
 
@@ -62,22 +69,20 @@ func main() {
 	_, err := c.AddFunc("0 16 * * *", func() {
 		log.Println("⏰ Cron Job Started: Fetching tasks...")
 
-		tasks := lib.QueryTasks(db)
-		log.Printf("📋 Found %d tasks to notify", len(tasks))
-
-		// Group tasks by email
-		tasksByEmail := make(map[string][]lib.Task)
-		for _, task := range tasks {
-			tasksByEmail[task.Email] = append(tasksByEmail[task.Email], task)
-		}
+		// Get all users with upcoming tasks
+		userEmails := lib.GetUniqueUserEmails(db)
+		log.Printf("📋 Found %d users with upcoming tasks", len(userEmails))
 
 		// Send email to each user
-		for email, userTasks := range tasksByEmail {
-			log.Printf("📨 Sending email to: %s (%d tasks)", email, len(userTasks))
-			if err := lib.SendEmail(email, userTasks); err != nil {
-				log.Printf("❌ Failed to send email to %s: %v", email, err)
-			} else {
-				log.Printf("✅ Email sent successfully to: %s", email)
+		for _, email := range userEmails {
+			tasks := lib.QueryTasksByUserEmail(db, email)
+			if len(tasks) > 0 {
+				log.Printf("📨 Sending email to: %s (%d tasks)", email, len(tasks))
+				if err := lib.SendEmail(email, tasks); err != nil {
+					log.Printf("❌ Failed to send email to %s: %v", email, err)
+				} else {
+					log.Printf("✅ Email sent successfully to: %s", email)
+				}
 			}
 		}
 	})

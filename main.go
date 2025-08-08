@@ -30,9 +30,9 @@ func main() {
 		// Create test data if no real data exists
 		testTasks := []lib.Task{
 			{
-				ID:            "test-1",
+				ID:            "cmb6blo4y017gpm1q50ku5vdx",
 				Title:         "ระบบแจ้งเตือนงานเริ่มทำงานแล้ว",
-				Description:   "ทดสอบระบบส่งอีเมลแจ้งเตือนงาน",
+				Description:   "ทดสอบระบบส่งอีเมลแจ้งเตือนงาน - คลิกปุ่ม View Task เพื่อไปยังหน้างาน",
 				Status:        "Assigned",
 				ProjectID:     "test-project-1",
 				ProjectTitle:  "CUSW Email Scheduler",

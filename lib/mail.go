@@ -94,12 +94,20 @@ func buildEmailBody(tasks []Task) string {
 			.button {
 				display: inline-block;
 				background-color: #007bff;
-				color: white;
+				color: white !important;
 				padding: 12px 24px;
 				text-decoration: none;
 				border-radius: 5px;
 				margin: 20px 0;
 				font-weight: bold;
+				border: none;
+				cursor: pointer;
+				transition: background-color 0.3s;
+			}
+			.button:hover {
+				background-color: #0056b3;
+				color: white !important;
+				text-decoration: none;
 			}
 			.footer {
 				margin-top: 30px;
@@ -113,7 +121,7 @@ func buildEmailBody(tasks []Task) string {
 	<body>
 		{{range .}}
 		<div class="header">
-			<h2>� Task Notification: {{.Title}} – {{.ProjectTitle}}</h2>
+			<h2>Task Notification: {{.Title}} – {{.ProjectTitle}}</h2>
 		</div>
 		
 		<p>Hi {{.AssigneeName}},</p>
@@ -147,7 +155,7 @@ func buildEmailBody(tasks []Task) string {
 		
 		<p>You can view the task and take necessary actions by clicking the button below:</p>
 		
-		<a href="#" class="button">👉 View Task</a>
+		<a href="https://cusw-workspace.sa.chula.ac.th/tasks/{{.ID}}" class="button" target="_blank">👉 View Task</a>
 		{{end}}
 		
 		<div class="footer">

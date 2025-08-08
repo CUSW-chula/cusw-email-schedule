@@ -158,7 +158,7 @@ func buildEmailBody(tasks []Task) string {
 	<body>
 		{{range .}}
 		<div class="header">
-			<img src="https://cusw-workspace.sa.chula.ac.th/asset/logo/s2.svg" alt="CUSW Logo" class="logo" style="width: 200px; max-height: 100px; display: block; margin: 0 auto 15px;">
+			<img src="https://cusw-workspace.sa.chula.ac.th/asset/logo/s2.png" alt="CUSW Logo" class="logo" style="width: 200px; max-height: 100px; display: block; margin: 0 auto 15px;">
 			<h2>🔔 Task Notification: {{.Title}} – {{.ProjectTitle}}</h2>
 		</div>
 		
@@ -197,7 +197,7 @@ func buildEmailBody(tasks []Task) string {
 		{{end}}
 		
 		<div class="footer">
-			<img src="https://cusw-workspace.sa.chula.ac.th/asset/logo/s2.svg" alt="CUSW Logo" class="footer-logo" style="width: 60px; max-height: 30px; display: block; margin: 0 auto 10px; opacity: 0.7;">
+			<img src="https://cusw-workspace.sa.chula.ac.th/asset/logo/s2.png" alt="CUSW Logo" class="footer-logo" style="width: 60px; max-height: 30px; display: block; margin: 0 auto 10px; opacity: 0.7;">
 			<p>Thank you,<br>
 			<strong>CUSW+</strong><br>
 			<em>This is an automated message from your task workspace.</em></p>

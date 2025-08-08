@@ -73,6 +73,9 @@ func buildEmailBody(tasks []Task) string {
 				display: block;
 				margin-left: auto;
 				margin-right: auto;
+				/* Ensure SVG displays properly in email clients */
+				width: 200px;
+				max-height: 100px;
 			}
 			.header h2 {
 				margin: 0;
@@ -91,6 +94,13 @@ func buildEmailBody(tasks []Task) string {
 			}
 			.task-info strong {
 				color: #495057;
+			}
+			.description-content {
+				margin-top: 8px;
+				line-height: 1.6;
+			}
+			.description-content p {
+				margin: 8px 0;
 			}
 			.status {
 				display: inline-block;
@@ -139,13 +149,16 @@ func buildEmailBody(tasks []Task) string {
 				display: block;
 				margin-left: auto;
 				margin-right: auto;
+				/* Ensure SVG displays properly in email clients */
+				width: 60px;
+				max-height: 30px;
 			}
 		</style>
 	</head>
 	<body>
 		{{range .}}
 		<div class="header">
-			<img src="https://cusw-workspace.sa.chula.ac.th/asset/logo/s2.svg" alt="CUSW Logo" class="logo">
+			<img src="https://cusw-workspace.sa.chula.ac.th/asset/logo/s2.svg" alt="CUSW Logo" class="logo" style="width: 200px; max-height: 100px; display: block; margin: 0 auto 15px;">
 			<h2>🔔 Task Notification: {{.Title}} – {{.ProjectTitle}}</h2>
 		</div>
 		
@@ -173,7 +186,7 @@ func buildEmailBody(tasks []Task) string {
 			{{if .Description}}
 			<div class="task-info">
 				<strong>📝 Description:</strong><br>
-				{{.Description}}
+				<div class="description-content">{{.Description | safeHTML}}</div>
 			</div>
 			{{end}}
 		</div>
@@ -184,7 +197,7 @@ func buildEmailBody(tasks []Task) string {
 		{{end}}
 		
 		<div class="footer">
-			<img src="https://cusw-workspace.sa.chula.ac.th/asset/logo/s2.svg" alt="CUSW Logo" class="footer-logo">
+			<img src="https://cusw-workspace.sa.chula.ac.th/asset/logo/s2.svg" alt="CUSW Logo" class="footer-logo" style="width: 60px; max-height: 30px; display: block; margin: 0 auto 10px; opacity: 0.7;">
 			<p>Thank you,<br>
 			<strong>CUSW+</strong><br>
 			<em>This is an automated message from your task workspace.</em></p>
@@ -197,6 +210,9 @@ func buildEmailBody(tasks []Task) string {
 	funcMap := template.FuncMap{
 		"lower": func(s string) string {
 			return strings.ToLower(s)
+		},
+		"safeHTML": func(s string) template.HTML {
+			return template.HTML(s)
 		},
 	}
 

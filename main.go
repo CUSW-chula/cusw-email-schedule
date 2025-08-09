@@ -91,35 +91,9 @@ func main() {
 		log.Fatalf("❌ Failed to set up Cron Job: %v", err)
 	}
 
-	// Define job to send email every day at 00:30 AM
-	_, err = c.AddFunc("30 0 * * *", func() {
-		log.Println("⏰ Cron Job Started (00:30): Fetching tasks...")
-
-		// Get all users with upcoming tasks
-		userEmails := lib.GetUniqueUserEmails(db)
-		log.Printf("📋 Found %d users with upcoming tasks", len(userEmails))
-
-		// Send email to each user
-		for _, email := range userEmails {
-			tasks := lib.QueryTasksByUserEmail(db, email)
-			if len(tasks) > 0 {
-				log.Printf("📨 Sending email to: %s (%d tasks)", email, len(tasks))
-				if err := lib.SendEmail(email, tasks); err != nil {
-					log.Printf("❌ Failed to send email to %s: %v", email, err)
-				} else {
-					log.Printf("✅ Email sent successfully to: %s", email)
-				}
-			}
-		}
-	})
-
-	if err != nil {
-		log.Fatalf("❌ Failed to set up second Cron Job: %v", err)
-	}
-
 	// Start the Cron scheduler
 	c.Start()
-	log.Println("✅ Email notification system is running... Waiting for executions at 00:30 and 16:00.")
+	log.Println("✅ Email notification system is running... Waiting for the next execution at 16:00.")
 
 	// Prevent the program from exiting
 	select {}

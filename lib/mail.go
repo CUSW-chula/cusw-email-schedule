@@ -21,7 +21,7 @@ func SendEmail(email string, tasks []Task) error {
 	sender := os.Getenv("EMAIL_SENDER")
 
 	// กำหนดเนื้อหาอีเมลแบบ HTML
-	subject := "🔔 Task Notification: CUSW Workspace"
+	subject := "🔔 Due date reminder: CUSW Workspace"
 	if len(tasks) > 0 {
 		subject = fmt.Sprintf("🔔 Task Notification: %s – %s", tasks[0].Title, tasks[0].ProjectTitle)
 	}

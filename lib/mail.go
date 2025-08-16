@@ -23,7 +23,7 @@ func SendEmail(email string, tasks []Task) error {
 	// กำหนดเนื้อหาอีเมลแบบ HTML
 	subject := "🔔 Due date reminder: CUSW Workspace"
 	if len(tasks) > 0 {
-		subject = fmt.Sprintf("🔔 Task Notification: %s – %s", tasks[0].Title, tasks[0].ProjectTitle)
+		subject = fmt.Sprintf("🔔 Due date reminder: %s – %s", tasks[0].Title, tasks[0].ProjectTitle)
 	}
 	body := buildEmailBody(tasks)
 

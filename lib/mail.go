@@ -159,13 +159,9 @@ func buildEmailBody(tasks []Task) string {
 		{{range .}}
 		<div class="header">
 			<img src="https://cusw-workspace.sa.chula.ac.th/asset/logo/s2.png" alt="CUSW Logo" class="logo" style="width: 200px; max-height: 100px; display: block; margin: 0 auto 15px;">
-			<h2>🔔 Task Notification: {{.Title}} – {{.ProjectTitle}}</h2>
+			<h2>🔔 Due date reminder: {{.Title}} – {{.ProjectTitle}}</h2>
 		</div>
-		
-		<p>Hi {{.AssigneeName}},</p>
-		
-		<p>You have a new update regarding a task in the cusw-workspace platform:</p>
-		
+						
 		<div class="task-container">
 			<div class="task-info">
 				<strong>📌 Task:</strong> {{.Title}}

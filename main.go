@@ -48,8 +48,17 @@ func main() {
 	// Set up Cron Scheduler
 	c := cron.New()
 
+	// Define job to send emails for tasks due in 7 days (runs at 8:00 AM)
+	_, err := c.AddFunc("0 8 * * *", func() {
+		log.Println("⏰ Cron Job Started: Sending 7-day reminders...")
+		sendRemindersForDays(db, 7)
+	})
+	if err != nil {
+		log.Fatalf("❌ Failed to set up 7-day reminder Cron Job: %v", err)
+	}
+
 	// Define job to send emails for tasks due in 3 days (runs at 9:00 AM)
-	_, err := c.AddFunc("0 9 * * *", func() {
+	_, err = c.AddFunc("0 9 * * *", func() {
 		log.Println("⏰ Cron Job Started: Sending 3-day reminders...")
 		sendRemindersForDays(db, 3)
 	})
@@ -79,6 +88,7 @@ func main() {
 	c.Start()
 	log.Println("✅ Email notification system is running...")
 	log.Println("📅 Schedule:")
+	log.Println("   - 7-day reminders at 08:00")
 	log.Println("   - 3-day reminders at 09:00")
 	log.Println("   - 2-day reminders at 14:00")
 	log.Println("   - 1-day reminders at 16:00")
